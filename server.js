@@ -3,7 +3,7 @@ const bodyParser = require("body-parser");
 const LocationsRoutes = require("./routes/locations")
 const CalculateRoutes = require("./routes/calculate")
 const mysqlConnection= require("./connection")
-const port = process.env.port || 5000
+const port = process.env.PORT || 5000
 
 var app = express();
 app.use(bodyParser.json());
