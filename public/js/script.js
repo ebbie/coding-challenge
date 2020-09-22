@@ -1,53 +1,52 @@
 if ('geolocation' in navigator) {
     console.log('geolocation available')
     navigator.geolocation.getCurrentPosition(position => {
-      const lat = position.coords.latitude;
-      const lon = position.coords.longitude;
-      document.getElementById('latitude').innerText = lat;
-      document.getElementById('longitude').innerText = lon;
+        const lat = position.coords.latitude;
+        const lon = position.coords.longitude;
+        document.getElementById('latitude').innerText = lat;
+        document.getElementById('longitude').innerText = lon;
     });
-  } else {
+} else {
     console.log('geolocation is not available')
-  }
+}
 
-  function submit() {
+function submit() {
     $.ajax({
-      url: "/calculate",
-      type: "POST",
-      dataType: "html",
-      data: JSON.stringify({
-        latitude: document.getElementById("latitude").innerText,
-        longitude: document.getElementById("longitude").innerText
+        url: "/calculate",
+        type: "POST",
+        dataType: "html",
+        data: JSON.stringify({
+            latitude: document.getElementById("latitude").innerText,
+            longitude: document.getElementById("longitude").innerText
 
-      }),
-      contentType: "application/json",
-      cache: false,
-      complete: function () {
-        //called when complete
-        console.log('process complete');
-      },
-      beforeSend: function() {
-        // setting a timeout
-        document.getElementById("pharmacyName").value="";
-        document.getElementById("pharmacyAddress").value="";
-        document.getElementById("pharmacyCity").value="";
-        document.getElementById("pharmacyZip").value="";
-        document.getElementById("Dist").value="";
-    },
-      success: function (data) {
-        console.log(data);
-        results = JSON.parse(data);
-        showPharmacyResults(results)
-        console.log('process sucess');
-      },
-
-      error: function (XMLHttpRequest, textStatus, errorThrown) {
-        console.log('error');
-        console.log(XMLHttpRequest, textStatus, errorThrown);
-      },
+        }),
+        contentType: "application/json",
+        cache: false,
+        beforeSend: function() {
+            // setting a timeout
+            document.getElementById("pharmacyName").value = "";
+            document.getElementById("pharmacyAddress").value = "";
+            document.getElementById("pharmacyCity").value = "";
+            document.getElementById("pharmacyZip").value = "";
+            document.getElementById("Dist").value = "";
+        },
+        success: function(data) {
+            console.log(data);
+            results = JSON.parse(data);
+            showPharmacyResults(results)
+            console.log('process sucess');
+        },
+        complete: function() {
+            //called when complete
+            console.log('process complete');
+        },
+        error: function(XMLHttpRequest, textStatus, errorThrown) {
+            console.log('error');
+            console.log(XMLHttpRequest, textStatus, errorThrown);
+        },
     });
-  }
-  var showPharmacyResults = function (results) {
+}
+var showPharmacyResults = function(results) {
     var PharmacyNamediv = document.getElementById("pharmacyName");
     var PharmacyAddressdiv = document.getElementById("pharmacyAddress");
     var PharmacyCitydiv = document.getElementById("pharmacyCity");
@@ -58,6 +57,4 @@ if ('geolocation' in navigator) {
     PharmacyCitydiv.innerHTML = results.pharmacyCity
     PharmacyZipdiv.innerHTML = results.pharmacyZip
     DistanceDiv.innerHTML = results.dist
-  }
-
-   
+}

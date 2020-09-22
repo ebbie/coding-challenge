@@ -1,4 +1,5 @@
 const mysql = require("mysql");
+
 var mysqlConnection = mysql.createConnection({
     host: "35.232.224.199",
     user: "coding-challenge",
@@ -41,6 +42,6 @@ function handleDisconnect() {
     });
 }
 
-//handleDisconnect();
+handleDisconnect();
 
 module.exports = mysqlConnection;
