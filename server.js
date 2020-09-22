@@ -25,4 +25,4 @@ app.get("/", (req, res)=> {
 app.use("/locations", LocationsRoutes);
 app.use("/calculate", CalculateRoutes);
 
-app.listen(port, ()=> console.log("Express server is running at post no : 5000"));
+app.listen(port, ()=> console.log("Express server is running at post no :", port));
