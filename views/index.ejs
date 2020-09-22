@@ -1,26 +1,70 @@
-</DOCTYPE html>
+<!DOCTYPE html>
 <html>
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Rx Savings Solution</title>
     <link rel="stylesheet" href="css/main.css">
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
 </head>
 <body>
     <script>
         if ('geolocation' in navigator) {
             console.log('geolocation available')
             navigator.geolocation.getCurrentPosition(position => {
-                console.log(position)
-                console.log(position.coords.latitude);
-                console.log(position.coords.longitude);
+                // console.log(position)
+                // console.log(position.coords.latitude);
+                // console.log(position.coords.longitude);
                 const lat = position.coords.latitude;
                 const lon = position.coords.longitude;
-                document.getElementById('latitude').textContent = lat;
-                document.getElementById('longitude').textContent = lon;
+                document.getElementById('latitude').innerText = lat;
+                document.getElementById('longitude').innerText = lon;
             });
         }else{
             console.log('geolocation is not available')
+        }
+
+        function submit() {
+            $.ajax({
+                url: "/calculate",
+                type: "POST",
+                dataType: "html",
+                data: JSON.stringify ({
+                    latitude: document.getElementById("latitude").innerText,
+                    longitude: document.getElementById("longitude").innerText
+
+                }),
+                contentType: "application/json",
+                cache: false,
+                complete: function() {
+                  //called when complete
+                  console.log('process complete');
+                },
+
+                success: function(data) {
+                  console.log(data);
+                  results= JSON.parse(data);
+                  showPharmacyResults(results)
+                  console.log('process sucess');
+               },
+
+                error: function(XMLHttpRequest, textStatus, errorThrown) {
+                    console.log('error');
+                  console.log(XMLHttpRequest, textStatus, errorThrown);
+                },
+              });
+        }
+        var showPharmacyResults = function (results) {
+            var PharmacyNamediv = document.getElementById("pharmacyName");
+            var PharmacyAddressdiv = document.getElementById("pharmacyAddress");
+            var PharmacyCitydiv = document.getElementById("pharmacyCity");
+            var PharmacyZipdiv = document.getElementById("pharmacyZip");
+            var DistanceDiv = document.getElementById("Dist");
+            PharmacyNamediv.innerHTML = results.pharmacyName
+            PharmacyAddressdiv.innerHTML += results.pharmacyAddress
+            PharmacyCitydiv.innerHTML += results.pharmacyCity
+            PharmacyZipdiv.innerHTML += results.pharmacyZip
+            DistanceDiv.innerHTML += results.dist
         }
     </script>
     <h1>Nearest pharmacy based on the current latitude and longitude coordinates</h1>
@@ -29,5 +73,30 @@
         Current longitude: <span id="longitude"></span>&deg;
 
     </p>
+    <button id="submit" onclick="submit()">SUBMIT</button>
+
+    <h2>Pharmacy Results</h2>
+
+<section id="list_pharmacy">
+
+</section>
+
+<table>
+  <tr>
+    <th>Name</th>
+    <th>Address</th>
+    <th>City</th>
+    <th>Zip Code</th>
+    <th>Distance</th>
+
+  </tr>
+  <tr>
+    <td id="pharmacyName"></td>
+    <td id="pharmacyAddress"></td>
+    <td id="pharmacyCity"></td>
+    <td id="pharmacyZip"></td>
+    <td id="Dist"></td>
+  </tr>
+</table>
 </body>
 </html>
