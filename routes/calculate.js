@@ -5,7 +5,6 @@ const mysqlConnection = require("../connection")
 Router.post("/",calculateMiles);
 
 function calculateMiles(req, res, next) {
-    console.log("This is inside function calculateMiles")
     userLatitude = req.body.latitude
     userLongitude = req.body.longitude
     mysqlConnection.query('SELECT * FROM LOCATION', req.body, (err, rows, fields) => {
@@ -26,12 +25,9 @@ function calculateMiles(req, res, next) {
                 pharmacyData = nearestPharmacy(userLatitude, userLongitude, pharmacyLatitude, pharmacyLongitude, 'M', pharmacyName, pharmacyAddress, pharmacyCity, pharmacyState, pharmacyZip);
                 pharmacyDetailswithDistance.push(pharmacyData)
             }
-            console.log(pharmacyDetailswithDistance[0].pharmacyName)
-            console.log("Pharmacy Before Sort",pharmacyDetailswithDistance)
             pharmacyDetailswithDistance.sort(function(a,b) {
                 return a.dist - b.dist;
             });
-            console.log("Pharmacy After Sort",pharmacyDetailswithDistance)
             res.send(pharmacyDetailswithDistance[0])
         }
         else {
