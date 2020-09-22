@@ -2,7 +2,7 @@ const express = require("express");
 const bodyParser = require("body-parser");
 const LocationsRoutes = require("./routes/locations")
 const CalculateRoutes = require("./routes/calculate")
-const mysqlConnection= require("./connection")
+const mysqlConnection = require("./connection")
 const port = process.env.PORT || 5000
 
 var app = express();
@@ -18,11 +18,11 @@ app.use('/img', express.static(__dirname + 'public/img'))
 app.set('views', './views')
 app.set('view engine', 'ejs')
 
-app.get("/", (req, res)=> {
+app.get("/", (req, res) => {
     res.render('index')
 })
 
 app.use("/locations", LocationsRoutes);
 app.use("/calculate", CalculateRoutes);
 
-app.listen(port, ()=> console.log("Express server is running at post no :", port));
+app.listen(port, () => console.log("Express server is running at post no :", port));

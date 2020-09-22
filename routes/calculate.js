@@ -2,9 +2,10 @@ const express = require("express")
 const Router = express.Router()
 const mysqlConnection = require("../connection")
 
-Router.post("/",calculateMiles);
+Router.post("/", getPharmacyDetailswithMiles);
 
-function calculateMiles(req, res, next) {
+// get the pharmacy details with distance
+function getPharmacyDetailswithMiles(req, res, next) {
     userLatitude = req.body.latitude
     userLongitude = req.body.longitude
     mysqlConnection.query('SELECT * FROM LOCATION', req.body, (err, rows, fields) => {
@@ -12,20 +13,20 @@ function calculateMiles(req, res, next) {
 
             var pharmacyDetailswithDistance = []
 
-            for(i=0; i<rows.length; i++){
+            for (i = 0; i < rows.length; i++) {
 
                 pharmacyLongitude = rows[i].longitude
                 pharmacyLatitude = rows[i].latitude
                 pharmacyName = rows[i].name
-                pharmacyAddress = rows[i].address 
+                pharmacyAddress = rows[i].address
                 pharmacyCity = rows[i].city
-                pharmacyState = rows[i].state 
+                pharmacyState = rows[i].state
                 pharmacyZip = rows[i].zip
 
                 pharmacyData = nearestPharmacy(userLatitude, userLongitude, pharmacyLatitude, pharmacyLongitude, 'M', pharmacyName, pharmacyAddress, pharmacyCity, pharmacyState, pharmacyZip);
                 pharmacyDetailswithDistance.push(pharmacyData)
             }
-            pharmacyDetailswithDistance.sort(function(a,b) {
+            pharmacyDetailswithDistance.sort(function (a, b) {
                 return a.dist - b.dist;
             });
             res.send(pharmacyDetailswithDistance[0])
@@ -36,6 +37,7 @@ function calculateMiles(req, res, next) {
     })
 }
 
+// find nearest pharmacy based on current location
 function nearestPharmacy(lat1, lon1, lat2, lon2, unit, pharmacyName, pharmacyAddress, pharmacyCity, pharmacyState, pharmacyZip) {
     var pharmacyName = pharmacyName
     var pharmacyAddress = pharmacyAddress
@@ -61,7 +63,7 @@ function nearestPharmacy(lat1, lon1, lat2, lon2, unit, pharmacyName, pharmacyAdd
         if (unit == "K") { dist = dist * 1.609344 }
         if (unit == "N") { dist = dist * 0.8684 }
 
-        var pharmaData = {'pharmacyName': pharmacyName, 'pharmacyAddress': pharmacyAddress, 'pharmacyCity': pharmacyCity, 'pharmacyState': pharmacyState, 'pharmacyZip': pharmacyZip, 'dist': dist}
+        var pharmaData = { 'pharmacyName': pharmacyName, 'pharmacyAddress': pharmacyAddress, 'pharmacyCity': pharmacyCity, 'pharmacyState': pharmacyState, 'pharmacyZip': pharmacyZip, 'dist': dist }
         return pharmaData;
     }
     next();
