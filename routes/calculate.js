@@ -26,12 +26,11 @@ function getPharmacyDetailswithMiles(req, res, next) {
                 pharmacyData = nearestPharmacy(userLatitude, userLongitude, pharmacyLatitude, pharmacyLongitude, 'M', pharmacyName, pharmacyAddress, pharmacyCity, pharmacyState, pharmacyZip);
                 pharmacyDetailswithDistance.push(pharmacyData)
             }
-            pharmacyDetailswithDistance.sort(function (a, b) {
+            pharmacyDetailswithDistance.sort(function(a, b) {
                 return a.dist - b.dist;
             });
             res.send(pharmacyDetailswithDistance[0])
-        }
-        else {
+        } else {
             console.log(err);
         }
     })
@@ -47,8 +46,7 @@ function nearestPharmacy(lat1, lon1, lat2, lon2, unit, pharmacyName, pharmacyAdd
 
     if ((lat1 == lat2) && (lon1 == lon2)) {
         return 0;
-    }
-    else {
+    } else {
         var radlat1 = Math.PI * lat1 / 180;
         var radlat2 = Math.PI * lat2 / 180;
         var theta = lon1 - lon2;
